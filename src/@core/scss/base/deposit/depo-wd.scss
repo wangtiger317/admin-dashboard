@@ -1,0 +1,179 @@
+// ================================================================================================
+// 	File Name: WdSidebar & DepoSidebar
+//
+// 	----------------------------------------------------------------------------------------------
+
+@import '../bootstrap-extended/include'; // Bootstrap includes
+@import '../components/include'; // Components includes
+
+$email_read: $body-bg;
+$email_selected_border: #e4e1e8;
+$email_details_header_height: 5rem;
+
+.vue-treeselect__multi-value-item,
+.vue-treeselect__value-remove {
+  color: #7367f0;
+  border-left: none;
+  background: transparent;
+}
+// Sidebar area starts
+// Email user list area
+.email-user-list {
+  position: relative;
+  height: calc(
+    100% - calc(3.49rem + 3.32rem)
+  ); // ? search box height (3.49rem) + select all section height (3.32rem)
+  .email-media-list {
+    padding: 0;
+    margin: 0;
+    // Set delay per List Item
+    @for $i from 1 through 5000 {
+      li:nth-child(#{$i}) {
+        animation-delay: 0.1s * $i;
+      }
+    }
+    li {
+      cursor: pointer;
+      transition: all 0.2s, background 0s, border-color 0s, color 0s;
+      animation: fadeIn 0.5s linear;
+      animation-fill-mode: both;
+      position: relative;
+      background: transparent;
+      &.media {
+        padding: ($spacer + 0.5);
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 3px 10px 0 $border-color;
+          transition: all 0.2s;
+          z-index: 1;
+        }
+        .media-left {
+          display: flex;
+          flex-direction: column;
+        }
+        .media-body {
+          overflow: hidden;
+        }
+      }
+      // Email avatar style
+      .avatar {
+        margin-bottom: 0.65rem;
+      }
+      .avatar,
+      .avatar img {
+        height: $avatar-size + 8;
+        width: $avatar-size + 8;
+      }
+
+      // read email
+      &.mail-read {
+        background-color: $email_read;
+      }
+      // selected email
+      &.selected-row-bg {
+        background-color: rgba($primary, 0.06);
+        &:not(:first-child) {
+          border-color: $email_selected_border;
+        }
+      }
+      &:not(:first-child) {
+        border-top: 1px solid $border-color;
+      }
+      .mail-details {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.55rem;
+      }
+      .mail-date {
+        color: $text-muted;
+        font-size: 0.857rem;
+      }
+      .mail-message {
+        p {
+          color: $text-muted;
+        }
+      }
+    }
+    .user-action {
+      display: flex;
+      .email-favorite {
+        i,
+        svg {
+          height: 1.25rem;
+          width: 1.25rem;
+          font-size: 1.25rem;
+          vertical-align: text-top;
+          color: $text-muted;
+          &.favorite {
+            fill: $warning;
+            stroke: $warning;
+          }
+        }
+      }
+    }
+  }
+  // Right content area common css starts
+  .content-right {
+    width: calc(100% - #{$menu-expanded-width});
+    border-left: 1px solid $border-color;
+    .email-app-list {
+      height: inherit;
+    }
+    .app-fixed-search {
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid $border-color;
+      background-color: $white;
+      border-top-right-radius: $border-radius;
+
+      .input-group:focus-within {
+        box-shadow: none;
+      }
+      input,
+      .input-group-text {
+        border: 0;
+        background-color: transparent;
+      }
+    }
+    .action-icon {
+      cursor: pointer;
+    }
+  }
+  .no-results {
+    display: none;
+    padding: 1.5rem;
+    text-align: center;
+    &.show {
+      display: block;
+    }
+  }
+  .ps__rail-y {
+    z-index: 2;
+  }
+}
+// custom win/lost list dropdown
+.customCheckbox {
+  position: relative;
+  .custom-select {
+    cursor: pointer;
+  }
+  .checkbox-select__dropdown {
+    // visibility: hidden;
+    position: absolute;
+    right: 0;
+    left: 0;
+    border: 1px solid #4d4d50;
+    border-radius: 0.357rem;
+    z-index: 10000;
+    background-color: white;
+    padding: 9px;
+    top: 66px;
+
+    cursor: pointer;
+    .custom-control-label {
+      cursor: pointer;
+    }
+  }
+  .isActive {
+    visibility: visible;
+  }
+}

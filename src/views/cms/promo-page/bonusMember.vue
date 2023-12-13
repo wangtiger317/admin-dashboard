@@ -1,0 +1,373 @@
+<template>
+  <div>
+    <!-- TurnOver -->
+    <b-card class="blog-edit-wrapper">
+      <b-row class="mx-1">
+        <b-col md="4">
+          <h1>Bonus (new member)</h1>
+          <p>Format 900px x 180px JPG (.jpg / .jpeg / .png) < 500KB</p>
+        </b-col>
+        <!-- ENABLE DISBLE THIS -->
+        <b-col cols="8" class="text-right mt-2">
+          <b-form-group v-model="getPromoNewMember.enabled">
+            <b-form-checkbox
+              name="check-button"
+              switch
+              inline
+              v-model="getPromoNewMember.enabled"
+            >
+            </b-form-checkbox>
+          </b-form-group>
+        </b-col>
+
+        <b-col md="6">
+          <b-form-file
+            v-model="fileImage"
+            :state="Boolean(file)"
+            @change="previewImage"
+            placeholder="choose file..."
+            drop-placeholder="drop file..."
+            accept="image/png, image/jpeg, image/jpg"
+          ></b-form-file>
+        </b-col>
+      </b-row>
+
+      <!-- PHOTO Preview -->
+      <!-- <b-col md="12" class="py-4 ml-1">
+        <h3>Photo preview :</h3>
+        <b-img src="./image/12.jpeg" alt="Responsive image"></b-img>
+      </b-col> -->
+      <b-col md="12" class="py-4 ml-1">
+        <h3>Photo preview :</h3>
+        <b-img
+          :src="previeImg"
+          v-if="previeImg"
+          width="1200px"
+          height="232px"
+        ></b-img>
+        <b-img
+          :src="image + getPromoNewMember.image"
+          v-else
+          alt="Responsive image"
+          width="1200px"
+          height="232px"
+        ></b-img>
+      </b-col>
+      <v-row class="d-flex mx-1">
+        <!-- ALT IMG Attribute -->
+        <b-col md="3">
+          <b-form-group
+            label="ALT IMG Attribute"
+            label-for="blog-edit-title"
+            class="mb-2"
+          >
+            <b-form-input
+              v-model="getPromoNewMember.alt"
+              id="blog-edit-title"
+              placeholder="ALT IMG"
+            />
+            <b-form-input
+              hidden
+              v-model="getPromoNewMember.image"
+              id="blog-edit-title"
+              placeholder="PATH IMG"
+            />
+          </b-form-group>
+        </b-col>
+
+        <!-- Judul Promosi -->
+        <b-col md="3">
+          <b-form-group
+            label="Judul Promosi"
+            label-for="blog-edit-title"
+            class="mb-2"
+          >
+            <b-form-input
+              v-model="getPromoNewMember.title"
+              id="blog-edit-title"
+              placeholder="Judul Promosi"
+            />
+          </b-form-group>
+        </b-col>
+
+        <!-- Max Bonus Diberikan (Rp) -->
+        <b-col md="3">
+          <b-form-group
+            label="Max Bonus Diberikan (Rp)"
+            label-for="blog-edit-title"
+            class="mb-2"
+          >
+            <b-form-input
+              v-model="getPromoNewMember.max_bonus_given"
+              id="blog-edit-title"
+              placeholder="Max Bonus Diberikan"
+            />
+          </b-form-group>
+        </b-col>
+
+        <!-- Value (%) -->
+        <b-col md="3">
+          <b-form-group
+            label="Value (%)"
+            label-for="blog-edit-title"
+            class="mb-2"
+          >
+            <b-form-input
+              v-model="getPromoNewMember.value_bonus"
+              id="blog-edit-title"
+              placeholder="Value"
+            />
+          </b-form-group>
+        </b-col>
+      </v-row>
+      <!-- form -->
+      <!-- form -->
+      <b-form class="mt-2 mx-2">
+        <b-row>
+          <b-col cols="12">
+            <b-form-group
+              label="Page Content"
+              label-for="blog-content"
+              class="mb-2"
+            >
+              <quill-editor
+                id="blog-content"
+                v-model="getPromoNewMember.content"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col cols="12" class="mb-2"> </b-col>
+          <b-col cols="12" class="mt-50">
+            <b-button
+              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+              variant="primary"
+              class="mr-1"
+              @click="
+                updateData(
+                  getPromoNewMember,
+                  fileImage,
+                  'success',
+                  'top-center'
+                )
+              "
+            >
+              Save
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-form>
+    </b-card>
+  </div>
+</template>
+
+<script>
+import {
+  BCard,
+  BFormCheckbox,
+  BMedia,
+  BAvatar,
+  BCardText,
+  BMediaAside,
+  BMediaBody,
+  BForm,
+  BRow,
+  BCol,
+  BFormGroup,
+  BFormInput,
+  BImg,
+  BFormFile,
+  BLink,
+  BButton,
+} from 'bootstrap-vue'
+import vSelect from 'vue-select'
+import { quillEditor } from 'vue-quill-editor'
+import Ripple from 'vue-ripple-directive'
+import BCardCode from '@core/components/b-card-code'
+import Cleave from 'vue-cleave-component'
+import { mapActions, mapGetters } from 'vuex'
+import 'cleave.js/dist/addons/cleave-phone.us'
+import { useInputImageRenderer } from '@core/comp-functions/forms/form-utils'
+import { ref } from '@vue/composition-api'
+import useJwt from '@/auth/jwt/useJwt'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import 'animate.css'
+
+export default {
+  components: {
+    BCard,
+    Cleave,
+    BCardCode,
+    BMedia,
+    BFormCheckbox,
+    BAvatar,
+    BCardText,
+    BMediaAside,
+    BMediaBody,
+    BForm,
+    BLink,
+    BImg,
+    BRow,
+    BCol,
+    BButton,
+    BFormGroup,
+    BFormInput,
+    BFormFile,
+    vSelect,
+    quillEditor,
+  },
+  directives: {
+    Ripple,
+  },
+
+  data() {
+    return {
+      imagesName:
+        'photos/cms/promotion/0pYvB1Nc4FARGsqvk7JQNvAj1WZJ9SvHDvZiKTtB.jpeg',
+      types: 'bonus_new_member',
+      fileImage: null,
+      previeImg: null,
+      file: null,
+      image: process.env.IMAGE_AGENT_API,
+    }
+  },
+  computed: {
+    ...mapGetters('cms', ['getPromoNewMember']),
+  },
+  created() {
+    const payload = {
+      type: this.types,
+    }
+    this.promoNewMemberlist(payload)
+  },
+
+  methods: {
+    ...mapActions('cms', ['promoNewMemberlist']),
+
+    previewImage(e) {
+      const nameImage = e.target.files[0].name
+      this.fileImage = nameImage
+      this.previeImg = URL.createObjectURL(e.target.files[0])
+      this.file = e.target.files[0]
+    },
+    updateData(data, image, variant, position) {
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'Data will be updated.',
+        confirmButtonText: 'Update',
+        cancelButtonText: 'No, I changed my mind!',
+        showCancelButton: true,
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-secondary ml-1',
+        },
+        showClass: {
+          popup: 'animate__animated animate__flipInX',
+        },
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          let id = data.id
+          const body = {
+            path: this.file,
+            alt: data.alt,
+            title: data.title,
+            content: data.content,
+            enabled: data.enabled === true || data.enabled === 'true' ? 1 : 0,
+            value_bonus: data.value_bonus,
+            max_bonus_given: data.max_bonus_given,
+          }
+          const getFormData = (object) =>
+            Object.entries(object).reduce((fd, [key, val]) => {
+              if (Array.isArray(val)) {
+                val.forEach((v) => fd.append(key, v))
+              } else {
+                fd.append(key, val)
+              }
+              return fd
+            }, new FormData())
+
+          useJwt
+            .createData(
+              'cms',
+              `/promo-page-bonus-new-member-update/${id}`,
+              getFormData(body),
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              }
+            )
+            .then((response) => {
+              this.$toast(
+                {
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Success',
+                    icon: 'CheckIcon',
+                    text: 'Updated successfully!',
+                    variant,
+                  },
+                },
+                {
+                  position,
+                }
+              )
+            })
+            .catch((error) => {
+              this.$toast(
+                {
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Error',
+                    icon: 'AlertCircleIcon',
+                    text: error.response.data.message,
+                    variant: 'danger',
+                  },
+                },
+                {
+                  position,
+                }
+              )
+            })
+        } else if (result.dismiss === 'cancel') {
+          this.$swal({
+            title: 'Cancelled',
+            text: 'Ok your data is still there and safe.',
+            confirmButtonText: 'Ok',
+            customClass: {
+              cancelButton: 'btn btn-secondary',
+            },
+          })
+        }
+      })
+    },
+  },
+
+  setup() {
+    const refInputEl = ref(null)
+    const refPreviewEl = ref(null)
+
+    const { inputImageRenderer } = useInputImageRenderer(
+      refInputEl,
+      (base64) => {
+        refPreviewEl.value.src = base64
+      }
+    )
+    return {
+      refInputEl,
+      refPreviewEl,
+      inputImageRenderer,
+    }
+  },
+}
+</script>
+
+<style lang="scss">
+@import '@core/scss/vue/libs/vue-select.scss';
+@import '@core/scss/vue/libs/quill.scss';
+@import '@core/scss/vue/pages/page-blog.scss';
+</style>
+
+<style lang="scss">
+@import '@core/scss/vue/libs/vue-flatpicker.scss';
+</style>

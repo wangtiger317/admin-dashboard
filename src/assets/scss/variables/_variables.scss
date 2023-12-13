@@ -1,0 +1,75 @@
+//  ================================================================================================
+//  ? TIP:  It is recommended to use this file for overriding bootstrap variables.
+//  ================================================================================================
+.BroadCast-Admin{
+   
+    color: white;
+    padding: 25px;
+    border-radius: 0.5rem;
+
+}
+
+.c-body input{
+  margin: 20px 0px;
+}
+.plus{
+  width: 35px;
+  
+}
+.Total{
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+.Total1{
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+.Total1 h3{
+  background-color: #f0f2f5;
+  margin: 2px;
+}
+.totalText{
+  color: green;
+}
+.btn1{
+  background-color: #e70606;
+  color: #ffff;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 14px;
+}
+.check{
+  background-color: #657185;
+  color: white;
+  padding: 0.625em 2em;
+  border: 0;
+    border-radius: 0.25em;
+}
+.delete{
+  background-color: #e95454;
+  color: white;
+  padding: 0.625em 2em;
+  border: 0;
+    border-radius: 0.25em;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.cancel{
+  background-color: #b58e8e;
+  color: white;
+  padding: 0.625em 2em;
+  border: 0;
+    border-radius: 0.25em;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.bar{
+  display: flex;
+  justify-content: center;
+  margin-left: 195px;
+}
+// .card-body{
+//       background: #efefef;
+// }
